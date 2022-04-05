@@ -1,6 +1,7 @@
 package com.example.button_tap_2
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +28,13 @@ class MainActivity : AppCompatActivity() {
         var b = findViewById<Button>(R.id.button);
         tv = findViewById<TextView>(R.id.textView);
         mtv = findViewById<EditText>(R.id.editTextTextMultiLine)
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        count = sharedPref.getInt("countValue",-1)
+        if (count == -1){
+            count = 0
+            Log.i("Button_Tap_2","No count value in SharedPreference")
+        }
+
         b.setOnClickListener(View.OnClickListener {
             count = count + 1
             tv.text="Clicked ${count} times"
@@ -96,6 +104,16 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         mtv.append("OnDestroy\n")
         Log.i("Button_Tap_2","onDestroy")
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        /*
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.saved_high_score_key), newHighScore)
+            apply()
+        }
+         */
+        var editor = sharedPref.edit()
+        editor.putInt("countValue",count)
+        editor.apply()
     }
 
     // API 21 , 22,
