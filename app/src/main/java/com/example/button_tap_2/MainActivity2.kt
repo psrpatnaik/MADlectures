@@ -2,9 +2,12 @@ package com.example.button_tap_2
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -24,6 +28,12 @@ class MainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         var b = findViewById<Button>(R.id.button2);
+        var tv = findViewById<TextView>(R.id.textView2)
+        var count = 0
+
+        val br: BroadcastReceiver = MyReceiver()
+        registerReceiver(br, IntentFilter("android.intent.action.AIRPLANE_MODE"))
+
         b.setOnClickListener(View.OnClickListener {
             /*
             // Explicit Intent, you need to associate an activity using FQN see the below line.
@@ -48,6 +58,26 @@ class MainActivity2 : AppCompatActivity() {
                         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),10)
                     }
         */
+            // introduce delay
+            count++
+
+            /*
+            Thread(Runnable {
+                // a potentially time consuming task
+                Thread.sleep(5000)
+
+                //tv.text = "Button clicked"
+                tv.post{
+                    tv.text = "Button clicked "+count
+                }
+            }).start()
+            */
+            /*
+            Intent(this, MyService::class.java).also { intent ->
+                startService(intent)
+            }
+            */
+
             // Creating a notification on Button Tap.
             // Ref: https://developer.android.com/training/notify-user/build-notification
             createNotificationChannelAndNotifcation()
